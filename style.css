@@ -1,0 +1,171 @@
+body {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.legend {
+  width: 100px;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+  border-radius: 0.25rem;
+}
+
+.red {
+  background-color: #f01b45;
+}
+
+.blue {
+  background-color: #3572f6;
+}
+
+.yellow {
+  background-color: #ffbf1e;
+}
+
+/* Memory block styles */
+.item {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animation for new blocks */
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.new-block {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Highlight animation */
+@keyframes highlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.highlight {
+  animation: highlight 1s ease;
+}
+
+/* Pulse animation for empty blocks */
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Progress bar for allocation */
+.progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background: white;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* Tooltip for blocks */
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .item {
+    height: 50px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .item {
+    height: 40px;
+    font-size: 0.75rem;
+  }
+
+  .legend {
+    width: 80px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .lg\:col-span-1,
+  .lg\:col-span-3 {
+    grid-column: span 1;
+  }
+
+  .item {
+    height: 35px;
+    font-size: 0.7rem;
+  }
+}

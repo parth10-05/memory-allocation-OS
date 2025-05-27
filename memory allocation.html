@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Memory Allocation</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Nunito+Sans:wght@400;600&family=Space+Grotesk:wght@500&display=swap"
+        rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-8 animate__animated animate__fadeIn">Dynamic Memory Allocation</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Left Section -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md animate__animated animate__fadeInLeft">
+                <h2 class="text-xl font-semibold mb-4">Memory Configuration</h2>
+                <form id="memoryAllocationForm" class="space-y-4">
+                    <div id="inputsContainer" class="space-y-2">
+                        <div class="flex items-center gap-2 input-row">
+                            <input type="number" class="w-full p-2 border rounded" placeholder="Enter size" min="1"
+                                required>
+                            <div class="flex items-center gap-1">
+                                <input type="radio" name="inputType1" value="memory" class="form-radio" checked>
+                                <label>Memory</label>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <input type="radio" name="inputType1" value="hole" class="form-radio">
+                                <label>Hole</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="addInput"
+                        class="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-plus mr-2"></i>Add Block
+                    </button>
+                    <button type="submit" id="submit"
+                        class="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-paper-plane mr-2"></i>Create Memory
+                    </button>
+                </form>
+
+                <h2 class="text-xl font-semibold mt-8 mb-4">Process Allocation</h2>
+                <form id="queryForm" class="space-y-4">
+                    <div id="queriesContainer" class="space-y-2">
+                        <div class="flex items-center gap-2 query-row">
+                            <input type="number" class="w-full p-2 border rounded" placeholder="Enter process size"
+                                min="1" required>
+                        </div>
+                    </div>
+                    <button type="button" id="addQuery"
+                        class="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-plus mr-2"></i>Add Process
+                    </button>
+                    <button type="submit" id="submitQuery"
+                        class="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-search mr-2"></i>Allocate Processes
+                    </button>
+                </form>
+
+                <h2 class="text-xl font-semibold mt-8 mb-4">Legend</h2>
+                <div class="flex flex-col gap-2">
+                    <div class="legend red flex items-center justify-between">
+                        <span>Holes</span>
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <div class="legend blue flex items-center justify-between">
+                        <span>Memory</span>
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <div class="legend yellow flex items-center justify-between">
+                        <span>Process</span>
+                        <i class="fas fa-square"></i>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="mt-4 p-3 rounded hidden"></div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-md animate__animated animate__fadeInRight">
+                <h2 class="text-xl font-semibold mb-4">Memory Allocation Visualization</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Original Memory Map</h3>
+                        <div id="hero" class="grid gap-1 min-h-16 bg-gray-50 rounded p-2 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">First Fit</h3>
+                        <div id="first" class="grid gap-1 min-h-16 bg-gray-50 rounded p-2 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Next Fit</h3>
+                        <div id="next" class="grid gap-1 min-h-16 bg-gray-50 rounded p-2 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Best Fit</h3>
+                        <div id="best" class="grid gap-1 min-h-16 bg-gray-50 rounded p-2 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Worst Fit</h3>
+                        <div id="worst" class="grid gap-1 min-h-16 bg-gray-50 rounded p-2 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Summary (Size in kb)</h3>
+                        <div id="summary"
+                            class="bg-gray-50 p-4 rounded-lg transition-all duration-500 hover:shadow-md overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border p-2">Algorithm</th>
+                                        <th class="border p-2">External Fragmentation</th>
+                                        <th class="border p-2">Internal Fragmentation</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+
+</html>
